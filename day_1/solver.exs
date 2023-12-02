@@ -32,57 +32,57 @@ result =
 
 IO.puts("Answer to part 1 = #{result}")
 
-string_to_number = %{
-  "one" => 1,
-  "two" => 2,
-  "three" => 3,
-  "four" => 4,
-  "five" => 5,
-  "six" => 6,
-  "seven" => 7,
-  "eight" => 8,
-  "nine" => 9
-}
+digit_strings = [
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine"
+]
 
-ends_with_number_string = fn str ->
-  Enum.reduce(Map.keys(string_to_number), {:not_found, nil}, fn key, acc ->
-    if String.ends_with?(str, key) do
-      {:found, Map.get(string_to_number, key)}
+starts_with_number_string = fn str ->
+  digit_strings
+  |> Enum.with_index(1)
+  |> Enum.reduce(nil, fn {number, index}, acc ->
+    if String.starts_with?(str, number) do
+      index
     else
       acc
     end
   end)
 end
 
+update_first_last = fn
+  current, nil -> current
+  {}, value -> {value, value}
+  {f, _}, value -> {f, value}
+end
+
 result =
   input_data
   |> Enum.reduce(0, fn line, result ->
-    {{first, second}, _} =
+    {first, second} =
       line
       |> String.graphemes()
-      |> Enum.reduce({{}, ""}, fn ch, {pair, str} ->
-        {was_found, value} = ends_with_number_string.(str <> ch)
+      |> Enum.with_index()
+      |> Enum.reduce({}, fn {ch, i}, acc ->
+        value =
+          cond do
+            String.match?(ch, ~r"\d") ->
+              String.to_integer(ch)
 
-        cond do
-          String.match?(ch, ~r"\d") ->
-            as_int = String.to_integer(ch)
+            string_digit = starts_with_number_string.(String.slice(line, i..-1)) ->
+              string_digit
 
-            if tuple_size(pair) == 0 do
-              {{as_int, as_int}, ""}
-            else
-              {{elem(pair, 0), as_int}, ""}
-            end
+            true ->
+              nil
+          end
 
-          was_found == :found ->
-            if tuple_size(pair) == 0 do
-              {{value, value}, str <> ch}
-            else
-              {{elem(pair, 0), value}, str <> ch}
-            end
-
-          true ->
-            {pair, str <> ch}
-        end
+        update_first_last.(acc, value)
       end)
 
     result + first * 10 + second
