@@ -64,12 +64,14 @@ result =
         {was_found, value} = ends_with_number_string.(str <> ch)
 
         cond do
-          String.match?(ch, ~r"\d") and tuple_size(pair) == 0 ->
-            as_int = String.to_integer(ch)
-            {{as_int, as_int}, ""}
-
           String.match?(ch, ~r"\d") ->
-            {{elem(pair, 0), String.to_integer(ch)}, str}
+            as_int = String.to_integer(ch)
+
+            if tuple_size(pair) == 0 do
+              {{as_int, as_int}, ""}
+            else
+              {{elem(pair, 0), as_int}, ""}
+            end
 
           was_found == :found ->
             if tuple_size(pair) == 0 do
