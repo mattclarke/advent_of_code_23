@@ -24,51 +24,53 @@ for y, l in enumerate(lines):
             number += ch
         elif ch == "." and in_number:
             in_number = False
-            parts.append((number,y, (x - len(number), x - 1)))
+            parts.append((number, y, (x - len(number), x - 1)))
         elif in_number:
             in_number = False
-            parts.append((number,y, (x - len(number), x - 1)))
+            parts.append((number, y, (x - len(number), x - 1)))
     if in_number:
         in_number = False
         parts.append((number, y, (len(l) - len(number), len(l) - 1)))
 
-print(parts)
-
 valid = []
+
+part_2 = {}
 
 for v in parts:
     n, y, (xl, xh) = v
-    ignore = set(range(xl, xh+1))
-    for y1 in range(y-1, y +2):
-        for x1 in range(xl-1, xh +2):
+    ignore = set(range(xl, xh + 1))
+    for y1 in range(y - 1, y + 2):
+        for x1 in range(xl - 1, xh + 2):
             if x1 < 0 or x1 >= len(lines[0]):
                 continue
             if y1 < 0 or y1 >= len(lines):
                 continue
-            # print(lines[y1][x1], y, x)
             if lines[y1][x1] == ".":
                 continue
             if y1 == y and x1 in ignore:
-                # print("ignored")
                 continue
-            # if lines[y1][x1].isdigit():
-            #     continue
+            if lines[y1][x1] == "*":
+                temp = part_2.get((y1, x1))
+                if not temp:
+                    temp = []
+                temp.append(n)
+                part_2[(y1, x1)] = temp
             valid.append(n)
-    # input()
 
-print(valid)
 result = 0
 
 for v in valid:
     result += int(v)
 
 
-
-
-# Part 1 = 
+# Part 1 = 532445
 print(f"answer = {result}")
 
 result = 0
 
-# Part 2 = 
+for n, v in part_2.items():
+    if len(v) == 2:
+        result += int(v[0]) * int(v[1])
+
+# Part 2 = 79842967
 print(f"answer = {result}")
