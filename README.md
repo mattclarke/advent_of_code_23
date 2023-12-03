@@ -12,8 +12,8 @@ Internet tip: going through the string using `enumerate` and `startswith` rather
 - Part 2: Falls out of part 1 naturally.
 
 ## Day 3
-- Part 1: .
-- Part 2: .
+- Part 1: Go through each row and if it is a digit check it is valid by looking for surrounding symbols. Also, need to keep track of consecutive digits as that creates the actual number we need.
+- Part 2: Modify the code for part 1 to check for asterisks as that could be a potential cog. Collect the possible cogs and see which ones are valid and calculate the result.
 
 ## Day 4
 - Part 1: .

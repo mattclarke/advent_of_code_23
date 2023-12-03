@@ -1,4 +1,3 @@
-import copy
 import sys
 
 
@@ -9,68 +8,57 @@ with open(FILE) as f:
 
 lines = [line.strip() for line in PUZZLE_INPUT.split("\n") if line]
 
-result = 0
-table = []
-parts = []
+valid_items = []
+potential_cogs = {}
 
 for y, l in enumerate(lines):
     in_number = False
     number = ""
+    valid = False
+    is_cog = False
     for x, ch in enumerate(l):
         if ch.isdigit() and not in_number:
             number = ch
             in_number = True
+            valid = False
+            is_cog = False
         elif ch.isdigit():
             number += ch
-        elif ch == "." and in_number:
+        elif not ch.isdigit() and in_number:
             in_number = False
-            parts.append((number, y, (x - len(number), x - 1)))
-        elif in_number:
-            in_number = False
-            parts.append((number, y, (x - len(number), x - 1)))
-    if in_number:
-        in_number = False
-        parts.append((number, y, (len(l) - len(number), len(l) - 1)))
+            if valid:
+                valid_items.append(int(number))
+        if in_number:
+            for dy in [-1, 0, 1]:
+                for dx in [-1, 0, 1]:
+                    ny = y + dy
+                    nx = x + dx
+                    if ny < 0 or ny >= len(lines):
+                        continue
+                    if nx < 0 or nx >= len(lines[0]):
+                        continue
+                    if lines[ny][nx].isdigit():
+                        continue
+                    if lines[ny][nx] == ".":
+                        continue
+                    if lines[ny][nx] == "*" and not is_cog:
+                        temp = potential_cogs.get((ny, nx), [])
+                        temp.append(len(valid_items))
+                        potential_cogs[(ny, nx)] = temp
+                        is_cog = True
 
-valid = []
-
-part_2 = {}
-
-for v in parts:
-    n, y, (xl, xh) = v
-    ignore = set(range(xl, xh + 1))
-    for y1 in range(y - 1, y + 2):
-        for x1 in range(xl - 1, xh + 2):
-            if x1 < 0 or x1 >= len(lines[0]):
-                continue
-            if y1 < 0 or y1 >= len(lines):
-                continue
-            if lines[y1][x1] == ".":
-                continue
-            if y1 == y and x1 in ignore:
-                continue
-            if lines[y1][x1] == "*":
-                temp = part_2.get((y1, x1))
-                if not temp:
-                    temp = []
-                temp.append(n)
-                part_2[(y1, x1)] = temp
-            valid.append(n)
-
-result = 0
-
-for v in valid:
-    result += int(v)
-
+                    valid = True
+        if x == len(l) - 1 and valid and in_number:
+            valid_items.append(int(number))
 
 # Part 1 = 532445
-print(f"answer = {result}")
+print(f"answer = {sum(valid_items)}")
 
 result = 0
 
-for n, v in part_2.items():
+for n, v in potential_cogs.items():
     if len(v) == 2:
-        result += int(v[0]) * int(v[1])
+        result += valid_items[v[0]] * valid_items[v[1]]
 
 # Part 2 = 79842967
 print(f"answer = {result}")
