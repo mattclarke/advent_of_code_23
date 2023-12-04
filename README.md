@@ -19,6 +19,8 @@ Internet tip: going through the string using `enumerate` and `startswith` rather
 - Part 1: Extract the ticket information and use sets to calculate the number of wins.
 - Part 2: Cache the number of wins per hand during part 1. Use a list to keep track of the number of cards for each card type, then go through each card assigning wins until we reach the final card.
 
+Update: Part 2 is simpler than I thought: the number of cards never increases (reading fail), so much less code required.
+
 ## Day 5
 - Part 1: .
 - Part 2: .
