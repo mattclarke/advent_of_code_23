@@ -16,8 +16,8 @@ Internet tip: going through the string using `enumerate` and `startswith` rather
 - Part 2: Modify the code for part 1 to check for asterisks as that could be a potential cog. Collect the possible cogs and see which ones are valid and calculate the result.
 
 ## Day 4
-- Part 1: .
-- Part 2: .
+- Part 1: Extract the ticket information and use sets to calculate the number of wins.
+- Part 2: Cache the number of wins per hand during part 1. Use a list to keep track of the number of cards for each card type, then go through each card assigning wins until we reach the final card.
 
 ## Day 5
 - Part 1: .
