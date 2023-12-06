@@ -22,8 +22,19 @@ Internet tip: going through the string using `enumerate` and `startswith` rather
 Update: Part 2 is simpler than I thought: the number of cards never increases (reading fail), so much less code required.
 
 ## Day 5
-- Part 1: .
-- Part 2: .
+- Part 1: Simple enough to use brute-force to solve.
+- Part 2: Takes a while to use brute-force (hours?) with a list of every seed - I accidently left it running during a meeting and came back to find the answer waiting for me! To speed it up, we just track the starts and ends rather than each individual seed; however, they increase in numbers significantly as the rules are applied which makes it very slow.
+E.g.
+```
+seed range = [10, 20] and the rule is "12 to 16 increase by 10" then we end up with three seed ranges
+=> [10, 12], [22, 26], [17, 20]
+```
+To speed the program up, we "join" the seed ranges that either overlap or are contiguous, e.g.
+```
+ranges = [10, 20], [19, 30] => [10, 30]
+ranges = [10, 20], [21, 30] => [10, 30]
+```
+Takes less than a second.
 
 ## Day 6
 - Part 1: .

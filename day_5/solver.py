@@ -1,4 +1,3 @@
-import copy
 import sys
 
 
@@ -23,7 +22,6 @@ for line in lines:
         index += 1
     elif line[0].isdigit():
         ans = [int(x.strip()) for x in line.split(" ")]
-        # TODO: store the diff and the end points
         diff = ans[0] - ans[1]
         h = ans[1] + ans[2] - 1
         rules[index].append([ans[1], h, diff])
@@ -50,74 +48,77 @@ for rule in rules:
 # Part 1 = 227653707
 print(f"answer = {min(current)}")
 
-current = []
-for i in range(0, len(seeds), 2):
-    current.append([seeds[i], seeds[i] + seeds[i + 1] - 1])
+# sorted so we can assume any seeds to the left of a rule as not changing
+rules = [sorted(r) for r in rules]
 
 
-def solve(current, convert):
+def solve2(current, convert):
     result = []
     queue = current
     while queue:
         changed = False
         l, h = queue.pop(0)
-        print("1", l, h)
         for c in convert:
-            dest, src, r = c
-            print(c)
-            if src + r <= l or h < src:
-                print("out")
-                # out of range
+            start, end, diff = c
+            if l < start and h < start:
+                # below range
+                break
+            elif l > end and h > end:
+                # above range
                 continue
-            elif src <= l < src + r and h < src + r:
+            elif start <= l <= end and start <= h <= end:
                 # both in range
-                print("both")
                 changed = True
-                l_diff = l - src
-                h_diff = h - src
-                result.append([dest + l_diff, dest + h_diff])
-            elif src <= l < src + r:
-                # only l is in range
-                print("l")
+                result.append([l + diff, h + diff])
+                break
+            elif l < start and h > end:
+                # whole range covered
                 changed = True
-                l_diff = l - src
-                result.append([dest + l_diff, dest + r - 1])
-                queue.append([src + r, h])
-            elif h >= src and h < src + r:
-                # only h in range
-                print("h")
+                result.append([start + diff, end + diff])
+                result.append([l, start - 1])
+                queue.append([end + 1, h])
+                break
+            elif l < start and start <= h <= end:
+                # straddling start
                 changed = True
-                h_diff = h - src
-                result.append([dest, dest + h_diff])
-                queue.append([l, src - 1])
+                result.append([start + diff, h + diff])
+                result.append([l, start - 1])
+                break
+            elif start <= l <= end and h > end:
+                # straddling end
+                changed = True
+                result.append([l + diff, end + diff])
+                queue.append([end + 1, h])
+                break
             else:
-                assert False, "oops"
-            print("res", result)
-            print("q", queue)
+                assert False, "Oops!"
         if not changed:
             result.append([l, h])
     return result
 
 
-print("======")
-print(current)
-current = solve(current, seed_to_soil)
-print(current)
-print("======")
-current = solve(current, soil_to_fert)
-print(current)
-print("======")
-current = solve(current, fert_to_water)
-print(current)
-print("======")
-current = solve(current, water_to_light)
-print(current)
-print("======")
-current = solve(current, light_to_temp)
-print(current)
-print("======")
-# current = solve(current, temp_to_humid)
-# current = solve(current, humid_to_loc)
+current = []
+for i in range(0, len(seeds), 2):
+    current.append([seeds[i], seeds[i] + seeds[i + 1] - 1])
+
+for rule in rules:
+    current = solve2(current, rule)
+    # if ranges overlap or are contiguous then join them together
+    # to reduce the number of values we need to traverse.
+    current = sorted(current)
+    curr = []
+    temp = current[0]
+    for c in current[1:]:
+        if temp[1] >= c[0]:
+            temp[1] = c[1]
+        elif temp[1] + 1 == c[0]:
+            temp[1] = c[1]
+        else:
+            curr.append(temp)
+            temp = c
+    curr.append(temp)
+    current = curr
+
 
 # Part 2 = 78775051
-print(f"answer = {min(current)}")
+print(f"answer = {min(current)[0]}")
