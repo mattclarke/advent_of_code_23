@@ -40,7 +40,7 @@ Turns out I had a bug which is why it created so many items. Once that was fixed
 
 ## Day 6
 - Part 1: Brute-force.
-- Part 2: Two binary searches: one to find the lower limit and one to find the higher limit.
+- Part 2: Two binary searches: one to find the lower limit and one to find the higher limit. The t isn't actually that big, so it only takes about 5 seconds to brute-force it.
 
 ## Day 7
 - Part 1: .
