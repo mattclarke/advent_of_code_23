@@ -27,12 +27,12 @@ for line in lines:
         rules[index].append([ans[1], h, diff])
 
 
-def solve(current, convert):
+def solve(current, rule):
     result = []
     for s in current:
         ans = s
-        for c in convert:
-            start, end, diff = c
+        for r in rule:
+            start, end, diff = r
             if start <= s <= end:
                 ans = s + diff
                 break
@@ -52,14 +52,14 @@ print(f"answer = {min(current)}")
 rules = [sorted(r) for r in rules]
 
 
-def solve2(current, convert):
+def solve2(current, rule):
     result = []
     queue = current
     while queue:
         changed = False
         l, h = queue.pop(0)
-        for c in convert:
-            start, end, diff = c
+        for r in rule:
+            start, end, diff = r
             if l < start and h < start:
                 # below range
                 break
@@ -103,22 +103,6 @@ for i in range(0, len(seeds), 2):
 
 for rule in rules:
     current = solve2(current, rule)
-    # if ranges overlap or are contiguous then join them together
-    # to reduce the number of values we need to traverse.
-    current = sorted(current)
-    curr = []
-    temp = current[0]
-    for c in current[1:]:
-        if temp[1] >= c[0]:
-            temp[1] = c[1]
-        elif temp[1] + 1 == c[0]:
-            temp[1] = c[1]
-        else:
-            curr.append(temp)
-            temp = c
-    curr.append(temp)
-    current = curr
-
 
 # Part 2 = 78775051
 print(f"answer = {min(current)[0]}")
