@@ -36,9 +36,11 @@ ranges = [10, 20], [21, 30] => [10, 30]
 ```
 Takes less than a second.
 
+Turns out I had a bug which is why it created so many items. Once that was fixed then the optimisations were no longer required :D
+
 ## Day 6
-- Part 1: .
-- Part 2: .
+- Part 1: Brute-force.
+- Part 2: Two binary searches: one to find the lower limit and one to find the higher limit.
 
 ## Day 7
 - Part 1: .
