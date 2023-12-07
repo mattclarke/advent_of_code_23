@@ -43,8 +43,8 @@ Turns out I had a bug which is why it created so many items. Once that was fixed
 - Part 2: Two binary searches: one to find the lower limit and one to find the higher limit. The t isn't actually that big, so it only takes about 5 seconds to brute-force it.
 
 ## Day 7
-- Part 1: .
-- Part 2: .
+- Part 1: Counter class FTW. The comparision function is bit of a mess but it works
+- Part 2: Same as part 1, but remove the "J"s and add their count to the most common card.
 
 ## Day 8
 - Part 1: .

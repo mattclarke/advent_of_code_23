@@ -1,5 +1,7 @@
 import copy
+import functools
 import sys
+from collections import Counter, defaultdict
 
 
 FILE = sys.argv[1] if len(sys.argv) > 1 else "input.txt"
@@ -9,58 +11,55 @@ with open(FILE) as f:
 
 lines = [line.strip() for line in PUZZLE_INPUT.split("\n") if line]
 
-result = 0
 hands = []
 
 for l in lines:
     cards, bid = l.split(" ")
     hands.append((cards, int(bid)))
 
-def score(hand):
-    ac = sorted(hand)
-    if ac[0] == ac[4]:
-        # five of a kind
-        score = 7
-    elif ac[0] == ac[3] or ac[1] == ac[4]:
-        # four of a kind
-        score = 6
-    elif ac[0] == ac[2] and ac[3] == ac[4]:
-        # full house
-        score = 5
-    elif ac[0] == ac[1] and ac[2] == ac[4]:
-        # full house
-        score = 5
-    elif ac[0] == ac[2] or ac[1] == ac[3] or ac[2] == ac[4]:
-        # three of a kind
-        score = 4
+values = {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
+
+
+def score(hand, pt2=False):
+    counts = Counter(hand)
+    if pt2:
+        num_j = counts["J"]
+        if num_j == 5:
+            return 7
+        del counts["J"]
+        in_order = sorted(counts.values())
+        in_order[~0] += num_j
     else:
-        s = set(ac)
-        if len(s) == 3:
-            # two pair
-            score = 3
-        elif len(s) == 4:
-            # one pair
-            score = 2
-        else:
-            # high card
-            score = 1
-    return score
+        in_order = sorted(counts.values())
+
+    if len(in_order) == 1:
+        # five of a kind
+        return 7
+    elif in_order[~0] == 4:
+        # four of a kind
+        return 6
+    elif in_order[0] == 2 and in_order[~0] == 3:
+        # full house
+        return 5
+    elif in_order[~0] == 3:
+        # three of a kind
+        return 4
+    elif in_order[~0] == 2 and in_order[~1] == 2:
+        # two pair
+        return 3
+    elif in_order[~0] == 2:
+        # one pair
+        return 2
+    else:
+        # high card
+        return 1
 
 
-values = {
-        "T": 10,
-        "J": 11,
-        "Q": 12,
-        "K": 13,
-        "A": 14
-        }
-
-
-def compare_hands(a, b):
+def compare_hands(a, b, pt2=False):
     a = a[0]
     b = b[0]
-    score_a = score(a)
-    score_b = score(b)
+    score_a = score(a, pt2)
+    score_b = score(b, pt2)
     if score_a < score_b:
         return -1
     elif score_a > score_b:
@@ -75,15 +74,12 @@ def compare_hands(a, b):
             if va > vb:
                 return 1
             elif vb > va:
-                return - 1
+                return -1
         assert False, "Ooops!"
 
 
-import functools
-
 ranked = sorted(hands, key=functools.cmp_to_key(compare_hands))
 
-print(ranked)
 
 result = 0
 for i, (h, sc) in enumerate(ranked, 1):
@@ -92,7 +88,14 @@ for i, (h, sc) in enumerate(ranked, 1):
 # Part 1 = 253933213
 print(f"answer = {result}")
 
-result = 0
+values["J"] = 0
+compare_func = lambda a, b: compare_hands(a, b, True)
+ranked = sorted(hands, key=functools.cmp_to_key(compare_func))
 
-# Part 2 = 
+result = 0
+for i, (h, sc) in enumerate(ranked, 1):
+    result += i * sc
+
+
+# Part 2 = 253473930
 print(f"answer = {result}")
