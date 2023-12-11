@@ -51,8 +51,8 @@ Turns out I had a bug which is why it created so many items. Once that was fixed
 - Part 2: Slight adjustment to algorithm to use multiple paths. Would take a long time for all to be at a finish at the same time, so time each individually and then calculate the LCM for the individual results. I thought it would be the LCM but somehow I got the wrong result, so disappeared down a rabbit hole for a few hours. Then I tried the LCM again and got the correct answer :(
 
 ## Day 9
-- Part 1: .
-- Part 2: .
+- Part 1: Implement algorithm by only keeping the last values and once the difference is calculated go throught the last values increasing them by the differencr.
+- Part 2: Adjust the algorithm to track the first values and essentially do the same thing but subtracting.
 
 ## Day 10
 - Part 1: .
