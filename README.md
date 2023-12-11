@@ -57,3 +57,8 @@ Turns out I had a bug which is why it created so many items. Once that was fixed
 ## Day 10
 - Part 1: .
 - Part 2: .
+
+## Day 11
+- Part 1: Sufficient to just crudely expand the input on the empty rows and columns.
+- Part 2: The expansion of empty rows and columns is now too big to do crudely
+Instead we track which rows and columns are empty, and we caluculate how many we cross when measuring the distance on the unexpanded layout and add 1,000,000 for each one.
