@@ -62,6 +62,8 @@ Then go around the loop in one direction and assign any empty space on the left 
 Flood fill the remaining empty spaces with whichever letter they are adjacent to.
 Finally, count up the number of As and Bs - the lowest value will be the number of squares enclosed as it is smaller than the area outside.
 
+Better solution is to use the 'line counting' algorithm, see the bottom of the code file for an implementation.
+
 ## Day 11
 - Part 1: Sufficient to just crudely expand the input on the empty rows and columns.
 - Part 2: The expansion of empty rows and columns is now too big to do crudely

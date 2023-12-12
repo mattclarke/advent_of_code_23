@@ -242,3 +242,43 @@ result = min(num_a, num_b)
 
 # Part 2 = 601
 print(f"answer = {result}")
+
+# INTERNET SOLUTION
+# Line counting algorithm
+# Walls:
+# | is clearly a wall
+# FJ is a wall and so is F------------J
+# L7 is a wall and so is L------------7
+# F7 is technically two walls, so can be treated as 0 walls
+# LJ is the same
+# Because we start from the right, we will hit a L or an F before J or 7
+
+# For spaces inside the number of walls will be odd
+
+result = 0
+for r in range(len(lines)):
+    potential_wall = ""
+    count = 0
+    for c in range(len(lines[0])):
+        if layout[r, c] == "-":
+            # Ignore dashes
+            continue
+
+        if layout[r, c] == ".":
+            if count % 2 == 1:
+                result += 1
+        elif layout[r, c] == "|":
+            count += 1
+        elif layout[r, c] in ["F", "L"]:
+            # could be start of wall
+            potential_wall = layout[r, c]
+            continue
+        elif layout[r, c] == "J":
+            if potential_wall == "F":
+                count += 1
+        elif layout[r, c] == "7":
+            if potential_wall == "L":
+                count += 1
+        potential_wall = ""
+
+print(f"internet answer = {result}")
