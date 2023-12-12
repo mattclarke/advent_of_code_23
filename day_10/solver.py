@@ -15,9 +15,7 @@ for r, l in enumerate(lines):
     for c, ch in enumerate(l):
         if ch == "S":
             S = (r, c)
-        layout[(r,c)] = ch
-print(S)
-
+        layout[r, c] = ch
 
 
 def find_exits(layout, loc):
@@ -25,26 +23,26 @@ def find_exits(layout, loc):
     curr = layout[loc]
     exits = []
     if curr == "S":
-        if layout.get((r-1,c)) in ["|", "7", "F"]:
-            exits.append((r-1, c))
-        if layout.get((r+1,c)) in ["|", "J", "L"]:
-            exits.append((r+1, c))
-        if layout.get((r,c-1)) in ["-", "F", "L"]:
-            exits.append((r, c-1))
-        if layout.get((r,c+1)) in ["-", "J", "7"]:
-            exits.append((r, c+1))
+        if layout.get((r - 1, c)) in ["|", "7", "F"]:
+            exits.append((r - 1, c))
+        if layout.get((r + 1, c)) in ["|", "J", "L"]:
+            exits.append((r + 1, c))
+        if layout.get((r, c - 1)) in ["-", "F", "L"]:
+            exits.append((r, c - 1))
+        if layout.get((r, c + 1)) in ["-", "J", "7"]:
+            exits.append((r, c + 1))
     elif curr == "-":
-        exits = [(r, c-1), (r, c+1)]
+        exits = [(r, c - 1), (r, c + 1)]
     elif curr == "|":
-        exits = [(r-1, c), (r+1, c)]
+        exits = [(r - 1, c), (r + 1, c)]
     elif curr == "L":
-        exits = [(r-1, c), (r, c+1)]
+        exits = [(r - 1, c), (r, c + 1)]
     elif curr == "J":
-        exits = [(r-1, c), (r, c-1)]
+        exits = [(r - 1, c), (r, c - 1)]
     elif curr == "7":
-        exits = [(r+1, c), (r, c-1)]
+        exits = [(r + 1, c), (r, c - 1)]
     elif curr == "F":
-        exits = [(r+1, c), (r, c+1)]
+        exits = [(r + 1, c), (r, c + 1)]
     else:
         assert False, "D'oh!"
 
@@ -52,16 +50,14 @@ def find_exits(layout, loc):
     return exits
 
 
-seen = {S: 0
-        }
-
+seen = {S: 0}
 curr_1, curr_2 = find_exits(layout, S)
 seen[curr_1] = 1
 seen[curr_2] = 1
+steps = 1
+moving = True
 
-steps = 2
-
-while True:
+while moving:
     moving = False
     exits = find_exits(layout, curr_1)
     for ex in exits:
@@ -78,93 +74,129 @@ while True:
         moving = True
         curr_2 = ex
         seen[curr_2] = steps
-    if not moving:
-        break
-    steps += 1
-
-result = steps-1
-
-# for r in range(10):
-#     row = []
-#     for c in range(10):
-#         if (r,c) in seen:
-#             row.append(seen[(r,c)])
-#         else:
-#             row.append(layout.get((r,c), '.'))
-#     print(row)
-#         
-
+    if moving:
+        steps += 1
 
 # Part 1 = 6649
-print(f"answer = {result}")
+print(f"answer = {steps}")
+
+
+def print_layout(layout, seen):
+    for r in range(1000):
+        row = []
+        for c in range(1000):
+            if (r, c) not in layout:
+                continue
+            if (r, c) in seen:
+                row.append("#")
+            else:
+                row.append(layout.get((r, c), "."))
+        if row:
+            print("".join(row))
+    print()
+
+
+# Remove disconnected pipes to simplify part 2
+for r in range(len(lines)):
+    for c in range(len(lines[0])):
+        if (r, c) not in seen:
+            layout[r, c] = "."
 
 
 curr, _ = find_exits(layout, S)
 seen = {S, curr}
 dots = {}
 direction = (curr[0] - S[0], curr[1] - S[1])
-print(direction)
+moving = True
 
-while True:
-    for r in range(10):
-        row = []
-        for c in range(10):
-            if (r,c) in seen:
-                row.append("$")
-            else:
-                row.append(layout.get((r,c), '.'))
-        print(row)
-    print()
-    input()
+print_layout(layout, seen)
+
+while moving:
     moving = False
     ch = layout[curr]
-    print(ch, curr, direction)
+    r, c = curr
     if ch == "|" and direction[0] == 1:
         # going down
-        pass
+        if (r, c + 1) in layout and layout[r, c + 1] == ".":
+            dots[r, c + 1] = "B"
+        if (r, c - 1) in layout and layout[r, c - 1] == ".":
+            dots[r, c - 1] = "A"
     elif ch == "|" and direction[0] == -1:
         # going up
-        pass
+        if (r, c - 1) in layout and layout[r, c - 1] == ".":
+            dots[r, c - 1] = "B"
+        if (r, c + 1) in layout and layout[r, c + 1] == ".":
+            dots[r, c + 1] = "A"
     elif ch == "-" and direction[1] == 1:
         # going right
         direction = (0, 1)
-        pass
+        if (r - 1, c) in layout and layout[r - 1, c] == ".":
+            dots[r - 1, c] = "B"
+        if (r + 1, c) in layout and layout[r + 1, c] == ".":
+            dots[r + 1, c] = "A"
     elif ch == "-" and direction[1] == -1:
         # going left
         direction = (0, -1)
-        pass
+        if (r + 1, c) in layout and layout[r + 1, c] == ".":
+            dots[r + 1, c] = "B"
+        if (r - 1, c) in layout and layout[r - 1, c] == ".":
+            dots[r - 1, c] = "A"
     elif ch == "L" and direction[0] == 1:
         # going right
         direction = (0, 1)
-        pass
+        if (r + 1, c) in layout and layout[r + 1, c] == ".":
+            dots[r + 1, c] = "A"
+        if (r, c - 1) in layout and layout[r, c - 1] == ".":
+            dots[r, c - 1] = "A"
     elif ch == "L" and direction[1] == -1:
         # going up
         direction = (-1, 0)
-        pass
+        if (r + 1, c) in layout and layout[r + 1, c] == ".":
+            dots[r + 1, c] = "B"
+        if (r, c - 1) in layout and layout[r, c - 1] == ".":
+            dots[r, c - 1] = "B"
     elif ch == "J" and direction[0] == 1:
         # going left
         direction = (0, -1)
-        pass
+        if (r + 1, c) in layout and layout[r + 1, c] == ".":
+            dots[r + 1, c] = "B"
+        if (r, c + 1) in layout and layout[r, c + 1] == ".":
+            dots[r, c + 1] = "B"
     elif ch == "J" and direction[1] == 1:
         # going up
         direction = (-1, 0)
-        pass
+        if (r + 1, c) in layout and layout[r + 1, c] == ".":
+            dots[r + 1, c] = "A"
+        if (r, c + 1) in layout and layout[r, c + 1] == ".":
+            dots[r, c + 1] = "A"
     elif ch == "7" and direction[0] == -1:
         # going left
         direction = (0, -1)
-        pass
+        if (r - 1, c) in layout and layout[r - 1, c] == ".":
+            dots[r - 1, c] = "A"
+        if (r, c + 1) in layout and layout[r, c + 1] == ".":
+            dots[r, c + 1] = "A"
     elif ch == "7" and direction[1] == 1:
         # going down
         direction = (1, 0)
-        pass
+        if (r - 1, c) in layout and layout[r - 1, c] == ".":
+            dots[r - 1, c] = "B"
+        if (r, c - 1) in layout and layout[r, c - 1] == ".":
+            dots[r, c - 1] = "B"
     elif ch == "F" and direction[1] == -1:
         # going down
         direction = (1, 0)
-        pass
+        if (r - 1, c) in layout and layout[r - 1, c] == ".":
+            dots[r - 1, c] = "A"
+        if (r, c - 1) in layout and layout[r, c - 1] == ".":
+            dots[r, c - 1] = "A"
     elif ch == "F" and direction[0] == -1:
         # going right
         direction = (0, 1)
-        pass
+        if (r - 1, c) in layout and layout[r - 1, c] == ".":
+            dots[r - 1, c] = "B"
+        if (r, c - 1) in layout and layout[r, c - 1] == ".":
+            dots[r, c - 1] = "B"
     else:
         assert False, "oops"
     exits = find_exits(layout, curr)
@@ -175,108 +207,38 @@ while True:
         curr = ex
         seen.add(curr)
 
+# Flood fill
+while True:
+    updated = False
+    for r in range(len(lines)):
+        for c in range(len(lines[0])):
+            if (r, c) in seen:
+                continue
+            if (r, c) in dots:
+                continue
+            surrounds = 0
+            for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                rr = r + dr
+                cc = c + dc
+                if (rr, cc) in dots:
+                    dots[r, c] = dots[rr, cc]
+                    updated = True
+                    break
+    if not updated:
+        break
 
+print_layout(layout, seen)
 
+num_a = 0
+num_b = 0
+for v in dots.values():
+    if v == "A":
+        num_a += 1
+    else:
+        num_b += 1
 
+# Because we flood the area the number enclosed will be the lower number
+result = min(num_a, num_b)
 
-#
-# water = set()
-#
-# # Surround layout with water
-# for r in range(-1, len(lines)+ 1):
-#     if r == -1:
-#         for c in range(-1, len(lines[0])+1):
-#             water.add((r,c))
-#     elif r == len(lines):
-#         for c in range(-1, len(lines[0])+1):
-#             water.add((r,c))
-#     else:
-#         water.add((r,-1))
-#         water.add((r,len(lines[0])))
-#
-# # Coarse fill
-# while True:
-#     to_add = set()
-#     for w in water:
-#         for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-#             cc = w[1] + dc
-#             rr = w[0] + dr
-#             if (rr, cc) in layout:
-#                 if layout[(rr, cc)] == "." and (rr, cc) not in water:
-#                     to_add.add((rr, cc))
-#     if not to_add:
-#         break
-#     water= water.union(to_add)
-#
-# visited = set()
-# while True:
-#     to_add = set()
-#     for w in water:
-#         for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-#             cc = w[1] + dc
-#             rr = w[0] + dr
-#             if (rr, cc) in layout:
-#                 while layout[(rr,cc)] != "." and (rr, cc) not in visited:
-#                     print("hello")
-#                     while (rr, cc) not in visited:
-#                         ch = layout[(rr,cc)]
-#                         if ch == "-":
-#                             if w[0] > rr:
-#                                 # Left is clockwise
-#                                 visited.add((rr, cc))
-#                                 if (rr + 1, cc) in layout and layout[rr + 1, cc] == ".":
-#                                     to_add.add((rr+1, cc))
-#                                 cc -= 1
-#                             else:
-#                                 # Right is clockwise
-#                                 visited.add((rr, cc))
-#                                 if (rr - 1, cc) in layout and layout[rr - 1, cc] == ".":
-#                                     to_add.add((rr-1, cc))
-#                                 cc += 1
-#                         elif ch == "|":
-#                             if w[1] > cc:
-#                                 # down is clockwise
-#                                 visited.add((rr, cc))
-#                                 if (rr, cc+1) in layout and layout[rr, cc+1] == ".":
-#                                     to_add.add((rr, cc+1))
-#                                 rr -= 1
-#                             else:
-#                                 # up is clockwise
-#                                 visited.add((rr, cc))
-#                                 if (rr, cc-1) in layout and layout[rr, cc-1] == ".":
-#                                     to_add.add((rr, cc-1))
-#                                 rr += 1
-#                         elif ch == "L":
-#                                 visited.add((rr, cc))
-#                                 if (rr, cc-1) in layout and layout[rr, cc-1] == ".":
-#                                     to_add.add((rr, cc-1))
-#                                 if (rr+1, cc) in layout and layout[rr+1, cc] == ".":
-#                                     to_add.add((rr+1, cc))
-#                                 rr -= 1
-#                         else:
-#                             break
-#
-#
-#
-#
-#
-#
-#                         for r in range(-1, 10):
-#                             row = []
-#                             for c in range(-1, 10):
-#                                 if (r, c) == (rr, cc):
-#                                     row.append("$")
-#                                 elif (r,c) in water:
-#                                     row.append("O")
-#                                 else:
-#                                     row.append(layout.get((r,c), '.'))
-#                             print(row)
-#                         print("")
-#         
-#                         input()
-#
-
-result = 0
-
-# Part 2 = 
+# Part 2 = 601
 print(f"answer = {result}")

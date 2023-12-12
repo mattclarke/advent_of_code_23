@@ -55,8 +55,12 @@ Turns out I had a bug which is why it created so many items. Once that was fixed
 - Part 2: Adjust the algorithm to track the first values and essentially do the same thing but subtracting.
 
 ## Day 10
-- Part 1: .
-- Part 2: .
+- Part 1: Pretty straightforward: from `S` start counting in both directions and continue until there is no more pipe to count .
+- Part 2: There is probably a much simpler way to solve this than my method.
+First, use the data from part 1 to remove any parts of pipe that is not connected to the main loop.
+Then go around the loop in one direction and assign any empty space on the left (relative to the direction of travel) as "A" and empty spaces on the right as "B".
+Flood fill the remaining empty spaces with whichever letter they are adjacent to.
+Finally, count up the number of As and Bs - the lowest value will be the number of squares enclosed as it is smaller than the area outside.
 
 ## Day 11
 - Part 1: Sufficient to just crudely expand the input on the empty rows and columns.
