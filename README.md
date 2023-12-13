@@ -68,3 +68,59 @@ Better solution is to use the 'line counting' algorithm, see the bottom of the c
 - Part 1: Sufficient to just crudely expand the input on the empty rows and columns.
 - Part 2: The expansion of empty rows and columns is now too big to do crudely
 Instead we track which rows and columns are empty, and we caluculate how many we cross when measuring the distance on the unexpanded layout and add 1,000,000 for each one.
+
+## Day 12
+- Part 1: Recursion.
+- Part 2: Big input, but can using caching to make it quick. It took me a while to get the caching to work correctly.
+
+## Day 13
+- Part 1: .
+- Part 2: .
+
+## Day 14
+- Part 1: .
+- Part 2: .
+
+## Day 15
+- Part 1: .
+- Part 2: .
+
+## Day 16
+- Part 1: .
+- Part 2: .
+
+## Day 17
+- Part 1: .
+- Part 2: .
+
+## Day 18
+- Part 1: .
+- Part 2: .
+
+## Day 19
+- Part 1: .
+- Part 2: .
+
+## Day 20
+- Part 1: .
+- Part 2: .
+
+## Day 21
+- Part 1: .
+- Part 2: .
+
+## Day 22
+- Part 1: .
+- Part 2: .
+
+## Day 23
+- Part 1: .
+- Part 2: .
+
+## Day 24
+- Part 1: .
+- Part 2: .
+
+## Day 25
+- Part 1: .
+- Part 2: .
