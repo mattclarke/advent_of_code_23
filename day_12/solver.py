@@ -10,6 +10,7 @@ with open(FILE) as f:
 lines = [line.strip() for line in PUZZLE_INPUT.split("\n") if line]
 
 def is_legal(line, orig):
+    # print(line, orig)
     for l, o in zip(line, orig):
         if o == "." and l != ".":
             return 0
@@ -20,34 +21,38 @@ def is_legal(line, orig):
     return 1
 
 def solve(line, numbers):
-    def _recurse(line, numbers, index, orig):
+    def _recurse(line, numbers, index, orig, cache):
         if not numbers:
             leg = is_legal(line, orig)
             return leg
         n = numbers.pop(0)
-        if index + n > len(line):
+        if n > len(line):
             return 0
         total = 0
-        for i in range(index, len(line)-n+1):
+        for i in range(0, len(line)-n+1):
             ch = line[i]
             if ch == ".":
                 continue
             temp = line[:i] + "!"*n + line[i+n:]
-            if is_legal(temp[i:i+n], orig[i:i+n]):
-                total += _recurse(temp, numbers[:], i + n + 1, orig)
+            if i+n < len(temp) and temp[i+n] == "#":
+                pass
+            elif is_legal(temp[:i+n], orig[:i+n]):
+                total += _recurse(temp[i+n+1:], numbers[:], i + n + 1, orig[i+n+1:], cache)
+
         return total
 
-    return _recurse(line, numbers, 0, line)
+    return _recurse(line, numbers, 0, line, {})
 
 
 result = 0
+# lines = ["?#?#?#?#?#?#?#? 1,3,1,6"]
 
 for l in lines:
     pattern, numbers = l.split(" ")
     numbers = [int(x) for x in numbers.split(",")]
-    result = solve(pattern, numbers)
-    print(result)
-    input()
+    temp = solve(pattern, numbers)
+    result += temp
+    # input()
 
 
 # Part 1 = 6871
