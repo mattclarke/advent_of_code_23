@@ -22,6 +22,10 @@ def is_legal(line, orig):
 
 def solve(line, numbers):
     def _recurse(line, numbers, index, orig, cache):
+        nc = numbers[:]
+        cached = cache.get((line, tuple(numbers)))
+        if cached is not None:
+            return cached
         if not numbers:
             leg = is_legal(line, orig)
             return leg
@@ -39,13 +43,13 @@ def solve(line, numbers):
             elif is_legal(temp[:i+n], orig[:i+n]):
                 total += _recurse(temp[i+n+1:], numbers[:], i + n + 1, orig[i+n+1:], cache)
 
+        cache[(line, tuple(nc))] = total
         return total
 
     return _recurse(line, numbers, 0, line, {})
 
 
 result = 0
-# lines = ["?#?#?#?#?#?#?#? 1,3,1,6"]
 
 for l in lines:
     pattern, numbers = l.split(" ")
