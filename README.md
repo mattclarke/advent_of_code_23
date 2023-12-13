@@ -74,8 +74,8 @@ Instead we track which rows and columns are empty, and we caluculate how many we
 - Part 2: Big input, but can using caching to make it quick. It took me a while to get the caching to work correctly.
 
 ## Day 13
-- Part 1: .
-- Part 2: .
+- Part 1: Simple enough to find the reflection. For the columns we rotate the layout by 90 degrees.
+- Part 2: Stuck for ages (a good night's sleep helps!). The key is to ignore the original reflection when searching for a reflections otherwise if the original appears before the new one we don't get to the new one. Simply really...
 
 ## Day 14
 - Part 1: .
