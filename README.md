@@ -78,8 +78,9 @@ Instead we track which rows and columns are empty, and we caluculate how many we
 - Part 2: Stuck for ages (a good night's sleep helps!). The key is to ignore the original reflection when searching for a reflections otherwise if the original appears before the new one we don't get to the new one. Simply really...
 
 ## Day 14
-- Part 1: .
-- Part 2: .
+- Part 1: Create the algorithm for tilting north and run it once.
+- Part 2: Create the algorithm for the other directions. The puzzle requires to run it for a long time, but it starts to repeat, so once it does we can use the repeat period to shortcut the loop.
+Used a dictionary to represent the layout - it might not be the most efficient data structure to use, but it finishes in a few seconds, so meh.
 
 ## Day 15
 - Part 1: .
