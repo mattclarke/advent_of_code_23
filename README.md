@@ -83,8 +83,8 @@ Instead we track which rows and columns are empty, and we caluculate how many we
 Used a dictionary to represent the layout - it might not be the most efficient data structure to use, but it finishes in a few seconds, so meh.
 
 ## Day 15
-- Part 1: .
-- Part 2: .
+- Part 1: Implement the hashing algorithm.
+- Part 2: Using a dictionary of dictionaries makes this trivial as Python's dictionary maintains the insertation order.
 
 ## Day 16
 - Part 1: .
