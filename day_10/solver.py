@@ -250,8 +250,9 @@ print(f"answer = {result}")
 # FJ is a wall and so is F------------J
 # L7 is a wall and so is L------------7
 # F7 is technically two walls, so can be treated as 0 walls
+#    -> F--------------------7
 # LJ is the same
-# Because we start from the right, we will hit a L or an F before J or 7
+# Because we start from the left, we will hit a L or an F before J or 7
 
 # For spaces inside the number of walls will be odd
 
