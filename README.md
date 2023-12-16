@@ -87,8 +87,8 @@ Used a dictionary to represent the layout - it might not be the most efficient d
 - Part 2: Using a dictionary of dictionaries makes this trivial as Python's dictionary maintains the insertation order.
 
 ## Day 16
-- Part 1: .
-- Part 2: .
+- Part 1: The algorithm is pretty simple to implement; I use a queue for adding an extra direction when hitting a splitter. The only catch was that some of the light can loop forever, so I used a set to determine if the light was reaching an already visited position whilest travelling in the same direction, if so then stop.
+- Part 2: Move the code from part 1 into a function that takes a start position and a direction and then try starting the light from all of the edges one by one and track the maximum.
 
 ## Day 17
 - Part 1: .
