@@ -91,8 +91,8 @@ Used a dictionary to represent the layout - it might not be the most efficient d
 - Part 2: Move the code from part 1 into a function that takes a start position and a direction and then try starting the light from all of the edges one by one and track the maximum.
 
 ## Day 17
-- Part 1: .
-- Part 2: .
+- Part 1: Initially just did BFS but biasing it towards unvisited squares, it is slow though (pypy ~7 minutes for both parts). Changing it to use a heapq is much quicker (pypy ~7 seconds for both parts).
+- Part 2: Slight modification to algorithm.
 
 ## Day 18
 - Part 1: .

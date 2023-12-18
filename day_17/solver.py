@@ -1,6 +1,6 @@
 import copy
+import heapq
 import sys
-from collections import deque
 
 FILE = sys.argv[1] if len(sys.argv) > 1 else "input.txt"
 
@@ -59,21 +59,17 @@ def print_layout(seen):
 
 def solve():
     SEEN = {}
-    HELP = set()
     best = 1000000000
 
-    Q = deque([(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)])
+    Q = [(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)]
 
     while Q:
-        r, c, dr, dc, f, score = Q.popleft()
-        HELP.add((r, c))
-        if (r, c, dr, dc, f) in SEEN:
-            if SEEN[(r, c, dr, dc, f)] <= score:
-                continue
+        r, c, dr, dc, f, score = heapq.heappop(Q)
+        if SEEN.get((r, c, dr, dc, f), 1000000000) <= score:
+            continue
         SEEN[(r, c, dr, dc, f)] = score
         if r == H - 1 and c == W - 1:
             best = min(best, score)
-            print(best)
             continue
         options = []
         options.append((r + dr, c + dc, dr, dc, f + 1))
@@ -88,10 +84,7 @@ def solve():
                 continue
             if score + lines[r][c] >= best:
                 continue
-            if (r, c) not in HELP:
-                Q.appendleft((r, c, dr, dc, f, score + lines[r][c]))
-            else:
-                Q.append((r, c, dr, dc, f, score + lines[r][c]))
+            heapq.heappush(Q, (r, c, dr, dc, f, score + lines[r][c]))
     return best
 
 
@@ -103,21 +96,17 @@ print(f"answer = {result}")
 
 def solve():
     SEEN = {}
-    HELP = set()
     best = 1000000000
 
-    Q = deque([(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)])
+    Q = [(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)]
 
     while Q:
-        r, c, dr, dc, f, score = Q.popleft()
-        HELP.add((r, c))
-        if (r, c, dr, dc, f) in SEEN:
-            if SEEN[(r, c, dr, dc, f)] <= score:
-                continue
+        r, c, dr, dc, f, score = heapq.heappop(Q)
+        if SEEN.get((r, c, dr, dc, f), 1000000000) <= score:
+            continue
         SEEN[(r, c, dr, dc, f)] = score
         if r == H - 1 and c == W - 1 and f >= 4:
             best = min(best, score)
-            print(best)
             continue
         options = []
         options.append((r + dr, c + dc, dr, dc, f + 1))
@@ -133,10 +122,7 @@ def solve():
                 continue
             if score + lines[r][c] >= best:
                 continue
-            if (r, c) not in HELP:
-                Q.appendleft((r, c, dr, dc, f, score + lines[r][c]))
-            else:
-                Q.append((r, c, dr, dc, f, score + lines[r][c]))
+            heapq.heappush(Q, (r, c, dr, dc, f, score + lines[r][c]))
     return best
 
 
