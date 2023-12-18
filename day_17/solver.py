@@ -1,6 +1,6 @@
 import copy
 import sys
-
+from collections import deque
 
 FILE = sys.argv[1] if len(sys.argv) > 1 else "input.txt"
 
@@ -49,14 +49,13 @@ def print_layout(seen):
     for r in range(H):
         line = ""
         for c in range(W):
-            if (r,c) in seen:
-                line +=  "#"
+            if (r, c) in seen:
+                line += "#"
             else:
                 line += "."
         print(line)
     print("=======================")
 
-from collections import deque
 
 def solve():
     SEEN = {}
@@ -67,14 +66,11 @@ def solve():
 
     while Q:
         r, c, dr, dc, f, score = Q.popleft()
-        if (r,c) not in HELP:
-            print_layout(HELP)
-        HELP.add((r,c))
+        HELP.add((r, c))
         if (r, c, dr, dc, f) in SEEN:
             if SEEN[(r, c, dr, dc, f)] <= score:
                 continue
         SEEN[(r, c, dr, dc, f)] = score
-        # print(r, c, dr, dc, f, score)
         if r == H - 1 and c == W - 1:
             best = min(best, score)
             print(best)
@@ -92,10 +88,10 @@ def solve():
                 continue
             if score + lines[r][c] >= best:
                 continue
-            if (r,c) not in HELP:
-                    Q.appendleft((r, c, dr, dc, f, score + lines[r][c]))
+            if (r, c) not in HELP:
+                Q.appendleft((r, c, dr, dc, f, score + lines[r][c]))
             else:
-                    Q.append((r, c, dr, dc, f, score + lines[r][c]))
+                Q.append((r, c, dr, dc, f, score + lines[r][c]))
     return best
 
 
@@ -104,7 +100,45 @@ result = solve()
 # Part 1 = 1246
 print(f"answer = {result}")
 
-result = 0
 
-# Part 2 =
-print(f"answer = {result}")
+def solve():
+    SEEN = {}
+    HELP = set()
+    best = 1000000000
+
+    Q = deque([(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)])
+
+    while Q:
+        r, c, dr, dc, f, score = Q.popleft()
+        HELP.add((r, c))
+        if (r, c, dr, dc, f) in SEEN:
+            if SEEN[(r, c, dr, dc, f)] <= score:
+                continue
+        SEEN[(r, c, dr, dc, f)] = score
+        if r == H - 1 and c == W - 1 and f >= 4:
+            best = min(best, score)
+            print(best)
+            continue
+        options = []
+        options.append((r + dr, c + dc, dr, dc, f + 1))
+        if f >= 4:
+            options.append(turn_right(r, c, dr, dc, f))
+            options.append(turn_left(r, c, dr, dc, f))
+        for r, c, dr, dc, f in options:
+            if f > 10:
+                # must turn
+                continue
+            if r < 0 or r >= H or c < 0 or c >= W:
+                # out of bounds
+                continue
+            if score + lines[r][c] >= best:
+                continue
+            if (r, c) not in HELP:
+                Q.appendleft((r, c, dr, dc, f, score + lines[r][c]))
+            else:
+                Q.append((r, c, dr, dc, f, score + lines[r][c]))
+    return best
+
+
+# Part 2 = 1389
+print(f"answer = {solve()}")
