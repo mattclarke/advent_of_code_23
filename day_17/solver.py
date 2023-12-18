@@ -45,13 +45,31 @@ def turn_left(r, c, dr, dc, f):
     assert False
 
 
+def print_layout(seen):
+    for r in range(H):
+        line = ""
+        for c in range(W):
+            if (r,c) in seen:
+                line +=  "#"
+            else:
+                line += "."
+        print(line)
+    print("=======================")
+
+from collections import deque
+
 def solve():
     SEEN = {}
+    HELP = set()
     best = 1000000000
 
-    Q = [(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)]
+    Q = deque([(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)])
+
     while Q:
-        r, c, dr, dc, f, score = Q.pop(0)
+        r, c, dr, dc, f, score = Q.popleft()
+        if (r,c) not in HELP:
+            print_layout(HELP)
+        HELP.add((r,c))
         if (r, c, dr, dc, f) in SEEN:
             if SEEN[(r, c, dr, dc, f)] <= score:
                 continue
@@ -74,13 +92,16 @@ def solve():
                 continue
             if score + lines[r][c] >= best:
                 continue
-            Q.append((r, c, dr, dc, f, score + lines[r][c]))
+            if (r,c) not in HELP:
+                    Q.appendleft((r, c, dr, dc, f, score + lines[r][c]))
+            else:
+                    Q.append((r, c, dr, dc, f, score + lines[r][c]))
     return best
 
 
 result = solve()
 
-# Part 1 =
+# Part 1 = 1246
 print(f"answer = {result}")
 
 result = 0
