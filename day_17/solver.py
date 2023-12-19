@@ -58,16 +58,16 @@ def print_layout(seen):
 
 
 def solve():
-    SEEN = {}
+    SEEN = set()
     best = 1000000000
 
-    Q = [(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)]
+    Q = [(0, 0, 0, 0, 1, 0), (0,0, 0, 1, 0, 0)]
 
     while Q:
-        r, c, dr, dc, f, score = heapq.heappop(Q)
-        if SEEN.get((r, c, dr, dc, f), 1000000000) <= score:
+        score,r, c, dr, dc, f  = heapq.heappop(Q)
+        if (r,c,dr,dc,f) in SEEN:
             continue
-        SEEN[(r, c, dr, dc, f)] = score
+        SEEN.add((r, c, dr, dc, f))
         if r == H - 1 and c == W - 1:
             best = min(best, score)
             continue
@@ -84,7 +84,7 @@ def solve():
                 continue
             if score + lines[r][c] >= best:
                 continue
-            heapq.heappush(Q, (r, c, dr, dc, f, score + lines[r][c]))
+            heapq.heappush(Q, (score + lines[r][c],r, c, dr, dc, f))
     return best
 
 
@@ -95,16 +95,16 @@ print(f"answer = {result}")
 
 
 def solve():
-    SEEN = {}
+    SEEN = set()
     best = 1000000000
 
-    Q = [(0, 0, 0, 1, 0, 0), (0, 0, 1, 0, 0, 0)]
+    Q = [(0, 0, 0, 0, 1, 0), (0,0, 0, 1, 0, 0)]
 
     while Q:
-        r, c, dr, dc, f, score = heapq.heappop(Q)
-        if SEEN.get((r, c, dr, dc, f), 1000000000) <= score:
+        score,r, c, dr, dc, f  = heapq.heappop(Q)
+        if (r,c,dr,dc,f) in SEEN:
             continue
-        SEEN[(r, c, dr, dc, f)] = score
+        SEEN.add((r, c, dr, dc, f))
         if r == H - 1 and c == W - 1 and f >= 4:
             best = min(best, score)
             continue
@@ -122,7 +122,7 @@ def solve():
                 continue
             if score + lines[r][c] >= best:
                 continue
-            heapq.heappush(Q, (r, c, dr, dc, f, score + lines[r][c]))
+            heapq.heappush(Q, (score + lines[r][c],r, c, dr, dc, f))
     return best
 
 

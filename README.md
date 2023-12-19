@@ -91,7 +91,7 @@ Used a dictionary to represent the layout - it might not be the most efficient d
 - Part 2: Move the code from part 1 into a function that takes a start position and a direction and then try starting the light from all of the edges one by one and track the maximum.
 
 ## Day 17
-- Part 1: Initially just did BFS but biasing it towards unvisited squares, it is slow though (pypy ~7 minutes for both parts). Changing it to use a heapq is much quicker (pypy ~7 seconds for both parts).
+- Part 1: Initially just did BFS but biasing it towards unvisited squares, it is slow though (pypy ~7 minutes for both parts). Changing it to use Dijkstra via heapq is much quicker (pypy < 5 seconds for both parts).
 - Part 2: Slight modification to algorithm.
 
 ## Day 18
@@ -113,6 +113,8 @@ The rows with corners need to be calculated separately because they are more com
 6  ########
 ```
 After doing this, the code take less than a second to find the solution.
+
+Internet solution: use the Shoelace formula and Pick's theorem. See the code for an explanation.
 
 ## Day 19
 - Part 1: Code up the algorithm as it is reasonably straightforward.

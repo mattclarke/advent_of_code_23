@@ -177,3 +177,67 @@ print(f"answer = {solve()}")
 
 # Part 2 = 88007104020978
 print(f"answer = {solve(True)}")
+
+# Internet solution - shoelace formula plus Pick's theorem
+CORNERS = [(0, 0)]
+pos = (0, 0)
+LENGTH = 0
+
+for i, l in enumerate(lines):
+    _, _, h = l.replace("(", "").replace(")", "").replace("#", "").split(" ")
+    n = h[:-1]
+    d = int(h[~0])
+    d = ["R", "D", "L", "U"][d]
+    n = int(n, 16)
+
+    LENGTH += n
+
+    if d == "R":
+        pos = (pos[0], pos[1] + n)
+    elif d == "L":
+        pos = (pos[0], pos[1] - n)
+    elif d == "U":
+        pos = (pos[0] - n, pos[1])
+    elif d == "D":
+        pos = (pos[0] + n, pos[1])
+    else:
+        assert False
+    CORNERS.append(pos)
+
+
+def shoelace(corners):
+    result = 0
+    for i in range(len(corners) - 1):
+        pos1, pos2 = corners[i], corners[i + 1]
+        result += (pos1[0] * pos2[1]) - (pos1[1] * pos2[0])
+
+    # Can be negative depending on which way round the points we go
+    return abs(result / 2)
+
+
+# Note: shoelace works in non-integer space
+# Doesn't matter in this case as everything is integers anyway...
+result = int(shoelace(CORNERS))
+
+# Pick's theorem: Area = (number of internal points) - (number of points on the perimeter)/2 + 1
+# The shoelace gives the number of internal points.
+# The number of points on the perimeter is the LENGTH
+# NOTE: Pick's theorem only works for integer space.
+#
+# For this puzzle, because the bounding line is a "thick" line, those squares need to be added too.
+# => Total area = number of exterior points (Perimeter) + Pick's
+# => Total area = LENGTH + shoelace - LENGTH/2 + 1
+# => Total area = shoelace + LENGTH/2 + 1
+
+# Pick's uses half the perimeter because half the line is already included in the
+# shoelace calculation.
+result += LENGTH // 2
+
+# At each exterior corner, a 0.5x0.5 chunk is missing
+# and at each interior corner, a 0.5x0.5 is an overlap
+# So the exterior and interior cancel out, except there
+# are four more exterior corners
+# 4 x 0.5 x 0.5 = 1
+result += 1
+
+print(f"Internet answer = {result}")
