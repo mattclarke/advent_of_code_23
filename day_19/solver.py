@@ -7,15 +7,56 @@ FILE = sys.argv[1] if len(sys.argv) > 1 else "input.txt"
 with open(FILE) as f:
     PUZZLE_INPUT = f.read()
 
-lines = [line.strip() for line in PUZZLE_INPUT.split("\n") if line]
-print(lines)
+lines = [line.strip() for line in PUZZLE_INPUT.split("\n")]
 
-result = 0
+rules = []
+inputs = []
+r = True
 
 for l in lines:
-    pass
+    if l == "":
+        r = False
+        continue
+    if r:
+        rules.append(l)
+    else:
+        if l:
+            inputs.append(eval(l.replace("{", "dict(").replace("}", ")")))
+RULES = {}
+for rule in rules:
+    n, r = rule.replace("}","").split("{")
+    parts = r.split(",")
+    subrules = []
+    for p in parts[:-1]:
+        p1, p2 = p.split(":")
+        c = p1[0]
+        l = f"lambda x: x{p1[1:]}"
+        subrules.append((c, eval(l), p2))
+    subrules.append(parts[~0])
+    RULES[n] = subrules
 
-# Part 1 = 
+accepted = []
+for i in inputs:
+    rule = RULES["in"]
+    while True:
+        default = True
+        for v, l, t in rule[:-1]:
+            if l(i[v]):
+                nrule = t
+                default = False
+                break
+        if default:
+            nrule = rule[~0]
+        if nrule == "R":
+            break
+        if nrule == "A":
+            accepted.append(i)
+            break
+        rule = RULES[nrule]
+
+result = sum([sum(v.values()) for v in accepted])
+
+# Part 1 = 391132 
 print(f"answer = {result}")
 
 result = 0
