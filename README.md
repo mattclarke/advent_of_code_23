@@ -67,7 +67,7 @@ Better solution is to use the 'line counting' algorithm, see the bottom of the c
 ## Day 11
 - Part 1: Sufficient to just crudely expand the input on the empty rows and columns.
 - Part 2: The expansion of empty rows and columns is now too big to do crudely
-Instead we track which rows and columns are empty, and we caluculate how many we cross when measuring the distance on the unexpanded layout and add 1,000,000 for each one.
+Instead we track which rows and columns are empty, and we calculate how many we cross when measuring the distance on the unexpanded layout and add 1,000,000 for each one.
 
 ## Day 12
 - Part 1: Recursion.
@@ -95,8 +95,11 @@ Used a dictionary to represent the layout - it might not be the most efficient d
 - Part 2: Slight modification to algorithm.
 
 ## Day 18
-- Part 1: .
-- Part 2: .
+- Part 1: Simple enough to use a set to sketch the outline and then fill in the internal space.
+- Part 2: Much bigger numbers so had to rewrite part 1. Keep track of the vertical lines and the corners, and then using the "line counting" algorithm from day 10 to work out which squares are in and out.
+The complicated part is the rows where corners appear as we need to work out whether the corner represents going through a wall or not.
+
+My solution takes ~45 seconds with Pypy, but I can speed it up with maths!
 
 ## Day 19
 - Part 1: .
