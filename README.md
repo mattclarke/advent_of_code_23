@@ -115,8 +115,17 @@ The rows with corners need to be calculated separately because they are more com
 After doing this, the code take less than a second to find the solution.
 
 ## Day 19
-- Part 1: .
-- Part 2: .
+- Part 1: Code up the algorithm as it is reasonably straightforward.
+- Part 2: Big numbers so bruteforce is not possible. Start off with all the possible values of x, m, a, and s as a tuple, e.g. (1, 4000) and then apply each rule and split the ranges as required.
+For example:
+```
+rule: x < 1000 go to qq else pp
+
+send {x: (0, 999), m: (0, 4000), a: (0, 4000), s: (0, 4000)} to qq
+and send {x: (1000, 4000), m: (0, 4000), a: (0, 4000), s: (0, 4000)} to pp
+and so on until they reach A.
+```
+At A, multiple the length of the four range together and accumulate.
 
 ## Day 20
 - Part 1: .
