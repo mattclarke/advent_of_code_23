@@ -99,7 +99,20 @@ Used a dictionary to represent the layout - it might not be the most efficient d
 - Part 2: Much bigger numbers so had to rewrite part 1. Keep track of the vertical lines and the corners, and then using the "line counting" algorithm from day 10 to work out which squares are in and out.
 The complicated part is the rows where corners appear as we need to work out whether the corner represents going through a wall or not.
 
-My solution takes ~45 seconds with Pypy, but I can speed it up with maths!
+My solution takes ~45 seconds with Pypy, but I can speed it up with maths! 
+
+Rows between rows with corners, such as 1, 2 and 3, have the same wall arrangement, so we only need to calculate the first row then multiply it by the number of rows before the next corner row.
+The rows with corners need to be calculated separately because they are more complicated.
+```
+0 ########
+1 #      #
+2 #      #
+3 #      #
+4 ##     ##
+5  #      #
+6  ########
+```
+After doing this, the code take less than a second to find the solution.
 
 ## Day 19
 - Part 1: .

@@ -16,7 +16,7 @@ def solve(is_part_2=False):
     CORNERS = {}
     VERT_START = []
     VERT_END = []
-    ROWS = set()
+    corner_rows = set()
 
     prev = None
     pos = (0, 0)
@@ -76,16 +76,16 @@ def solve(is_part_2=False):
             assert False
         HMAX = max(HMAX, pos[0])
         HMIN = min(HMIN, pos[0])
-        ROWS.add(pos[0])
+        corner_rows.add(pos[0])
 
     CORNERS[(0, 0)] = "F"  # From looking at the input
-    ROWS = list(sorted(ROWS))
+    corner_rows = list(sorted(corner_rows))
 
     result = 0
     r = HMIN
 
     while r < HMAX + 1:
-        if r in ROWS:
+        if r in corner_rows:
             walls = []
             for (st_r, st_c), (end_r, end_c) in zip(VERT_START, VERT_END):
                 if st_r <= r <= end_r:
@@ -142,6 +142,8 @@ def solve(is_part_2=False):
                         continue
 
                 i += 1
+            corner_rows.pop(0)
+            r += 1
         else:
             walls = []
             for (st_r, st_c), (end_r, end_c) in zip(VERT_START, VERT_END):
@@ -152,15 +154,21 @@ def solve(is_part_2=False):
             inside = False
             prev_wall = None
             i = 0
+            row_count = 0
             while i < len(walls):
                 if inside:
-                    result += walls[i][1] - prev_wall[1] + 1
+                    row_count += walls[i][1] - prev_wall[1] + 1
                     inside = False
                 else:
                     inside = True
                     prev_wall = walls[i]
                 i += 1
-        r += 1
+
+            # Until we reach a row with a corner in it, the number of inside
+            # squares for the rows will be the same, so we can jump ahead.
+            num_rows = corner_rows[0] - r
+            result += row_count * num_rows
+            r = corner_rows[0]
     return result
 
 
