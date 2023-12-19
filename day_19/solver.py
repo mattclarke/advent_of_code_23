@@ -35,8 +35,7 @@ for rule in rules:
     subrules.append(parts[~0])
     RULES[n] = subrules
 
-accepted = []
-for i in inputs:
+def is_accepted(initial):
     rule = RULES["in"]
     while True:
         default = True
@@ -48,11 +47,15 @@ for i in inputs:
         if default:
             nrule = rule[~0]
         if nrule == "R":
-            break
+            return False
         if nrule == "A":
-            accepted.append(i)
-            break
+            return True
         rule = RULES[nrule]
+
+accepted = []
+for i in inputs:
+    if is_accepted(i):
+        accepted.append(i)
 
 result = sum([sum(v.values()) for v in accepted])
 
