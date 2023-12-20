@@ -219,7 +219,8 @@ def shoelace(corners):
 # Doesn't matter in this case as everything is integers anyway...
 result = int(shoelace(CORNERS))
 
-# Pick's theorem: Area = (number of internal points) - (number of points on the perimeter)/2 + 1
+# Pick's theorem (when all angles are 90 degrees:
+#    Area = (number of internal points) - (number of points on the perimeter)/2 + 1
 # The shoelace gives the number of internal points.
 # The number of points on the perimeter is the LENGTH
 # NOTE: Pick's theorem only works for integer space.
