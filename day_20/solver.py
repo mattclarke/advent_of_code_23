@@ -157,25 +157,31 @@ for _ in range(1000):
 # Part 1 = 825896364
 print(f"answer = {low_sent * high_sent}")
 
+from collections import deque
+
 collect = {}
 not_done = True
-for i in range(1, 1000000):
-    Q = [("broadcaster", LOW, "")]
+for i in range(1, 200_000):
+    Q = deque([("broadcaster", LOW, "")])
 
     while Q:
-        d, pulse, n = Q.pop(0)
+        d, pulse, n = Q.popleft()
         if d in modules_pt2:
             temp = modules_pt2[d].send(pulse, n)
             for t in temp:
                 Q.append(t)
-        for m in ["hl", "hq", "bc", "ql"]:
-            if modules_pt2[m].all_high:
-                temp = collect.get(m, (0, 0))
+        # if d in ["hl", "hq"]:
+        #     if modules_pt2["hl"].all_high and modules_pt2["hq"].all_high:
+        #         print("hello", i)
+        if d in ["lm", "jd", "fv", "vm"]:
+        # for m in ["hl", "hq", "bc", "ql"]:
+            if not modules_pt2[d].all_high:
+                temp = collect.get(d, (0, 0))
                 if temp[1] != i:
-                    collect[m] = (temp[1], i)
+                    collect[d] = (temp[1], i)
 starts = []
 steps = []
-for m in ["hl", "hq", "bc", "ql"]:
+for m in ["lm", "jd", "fv", "vm"]:
     prev, last = collect[m]
     print(m, last, last - prev, collect[m])
     starts.append(last)
@@ -198,7 +204,6 @@ while True:
             else:
                 s2 += step2
     print("done", s1, s2, step1)
-    input()
     step1 = step1 * step2
     s2 = starts.pop(0)
     step2 = steps.pop(0)
