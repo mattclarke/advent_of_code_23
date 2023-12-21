@@ -60,6 +60,8 @@ class Conjunction:
         self.dest = []
         self.senders = {}
         self.name = None
+        self.all_high = False
+    
 
     def send(self, pulse, sender):
         global low_sent, high_sent
@@ -71,6 +73,7 @@ class Conjunction:
         for v in self.senders.values():
             if v == LOW:
                 all_high = False
+        self.all_high = all_high
 
         if all_high:
             for d in self.dest:
@@ -136,6 +139,7 @@ low_sent = 0
 high_sent = 0
 
 outputs = {}
+modules_pt2 = copy.deepcopy(modules)
 
 for _ in range(1000):
     Q = [("broadcaster", LOW, "")]
@@ -154,7 +158,51 @@ for _ in range(1000):
 # Part 1 = 825896364
 print(f"answer = {low_sent * high_sent}")
 
-result = 0
+collect = {}
+not_done = True
+for i in range(1, 1000000):
+    Q = [("broadcaster", LOW, "")]
+
+    while Q:
+        d, pulse, n = Q.pop(0)
+        if d in modules_pt2:
+            temp = modules_pt2[d].send(pulse, n)
+            for t in temp:
+                Q.append(t)
+        for m in ["hl", "hq", "bc", "ql"]:
+            if modules_pt2[m].all_high:
+                temp = collect.get(m, (0, 0))
+                if temp[1] != i:
+                    collect[m] = (temp[1], i)
+starts = []
+steps = []
+for m in ["hl", "hq", "bc", "ql"]:
+    prev, last = collect[m]
+    print(m, last, last-prev, collect[m])
+    starts.append(last)
+    steps.append(last - prev)
+
+s1 = starts.pop(0)
+step1 = steps.pop(0)
+
+s2 = starts.pop(0)
+step2 = steps.pop(0)
+
+while True:
+    while s1 != s2:
+        if s1 < s2:
+            s1 += step1
+        else:
+            if (s1 - s2) > step2:
+                nsteps = (s1 - s2) // step2
+                s2 += step2 *nsteps
+            else:
+                s2 += step2
+    print("done", s1, s2, step1)
+    input()
+    step1 = step1 * step2
+    s2 = starts.pop(0)
+    step2 = steps.pop(0)
 
 # Part 2 =
 print(f"answer = {result}")
