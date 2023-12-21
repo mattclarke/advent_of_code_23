@@ -42,7 +42,20 @@ for _ in range(64):
 # Part 1 = 3858
 print(f"answer = {len(possible)}")
 
-result = 0
+possible = {S} 
+for _ in range(500):
+    new_possible = set()
+    for p in possible:
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            r = p[0] + dr
+            c = p[1] + dc
+            if dr ==0 and dc == 0:
+                continue
+            rm = r % len(lines[0])
+            cm = c % len(lines)
+            if lines[rm][cm] != "#":
+                new_possible.add((r,c))
+    possible = new_possible
 
 # Part 2 = 
-print(f"answer = {result}")
+print(f"answer = {len(possible)}")
