@@ -42,8 +42,20 @@ for _ in range(64):
 # Part 1 = 3858
 print(f"answer = {len(possible)}")
 
+def print_layout(layout):
+    for r in range(len(lines)):
+        line = ""
+        for c in range(len(lines[0])):
+            if (r,c) in layout:
+                line += "O"
+            else:
+                line += lines[r][c]
+        print(line)
+    print("================")
+
 possible = {S} 
-for _ in range(500):
+for _ in range(50):
+    print_layout(possible)
     new_possible = set()
     for p in possible:
         for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
