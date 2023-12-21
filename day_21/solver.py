@@ -54,8 +54,8 @@ def print_layout(layout):
     print("================")
 
 possible = {S} 
-for _ in range(50):
-    print_layout(possible)
+for _ in range(25):
+    # print_layout(possible)
     new_possible = set()
     for p in possible:
         for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
@@ -68,6 +68,39 @@ for _ in range(50):
             if lines[rm][cm] != "#":
                 new_possible.add((r,c))
     possible = new_possible
+print_layout(possible)
+
+# It forms a diamond and from the start position there are no rocks in the N, S, E, W directions
+turns = 25
+min_r = S[0] - turns
+max_r = S[0] + turns
+min_c = S[1] - turns
+max_c = S[1] + turns
+
+
+# count the number of positions in the diamond
+result = 0
+for r in range(0, turns+1):
+    rr = S[0] - r
+    even = True
+    for c in range(-turns + r, turns + 1 - r):
+        cc = S[1] + c
+        # print(rr-S[0], cc-S[1])
+        if lines[rr][cc] != "#" and even:
+            result += 1
+        even = not even
+
+for r in range(1, turns+1):
+    rr = S[0] + r
+    even = True
+    for c in range(-turns + r, turns + 1 - r):
+        cc = S[1] + c
+        # print(rr-S[0], cc-S[1])
+        if lines[rr][cc] != "#" and even:
+            result += 1
+        even = not even
+
+print("result", result)
 
 # Part 2 = 
 print(f"answer = {len(possible)}")
