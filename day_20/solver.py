@@ -61,7 +61,6 @@ class Conjunction:
         self.senders = {}
         self.name = None
         self.all_high = False
-    
 
     def send(self, pulse, sender):
         global low_sent, high_sent
@@ -178,7 +177,7 @@ starts = []
 steps = []
 for m in ["hl", "hq", "bc", "ql"]:
     prev, last = collect[m]
-    print(m, last, last-prev, collect[m])
+    print(m, last, last - prev, collect[m])
     starts.append(last)
     steps.append(last - prev)
 
@@ -195,7 +194,7 @@ while True:
         else:
             if (s1 - s2) > step2:
                 nsteps = (s1 - s2) // step2
-                s2 += step2 *nsteps
+                s2 += step2 * nsteps
             else:
                 s2 += step2
     print("done", s1, s2, step1)
