@@ -134,8 +134,9 @@ At A, multiple the length of the four range together and accumulate.
 - Part 2: .
 
 ## Day 21
-- Part 1: .
-- Part 2: .
+- Part 1: Algorithm is relatively simple to implement.
+- Part 2: Spent a long time trying to calculate the answer based on the number of completed squares we would get for the number of steps then adding the partially completed steps. Got somewhere in the right ball-park but not the right answer.
+Playing around I discovered that the if we advance by x squares (and a half) then the difference between results increases by a fixed amount each time. Thus, it is just a case of solving some simple maths.
 
 ## Day 22
 - Part 1: .
