@@ -62,7 +62,8 @@ def print_layout(layout, start=S):
     print("================")
 
 
-def solve(start, steps, limit=True):
+def solve(start, steps):
+    answers = []
     possible = {start}
     for i in range(steps):
         new_possible = set()
@@ -72,36 +73,29 @@ def solve(start, steps, limit=True):
                 c = p[1] + dc
                 if dr == 0 and dc == 0:
                     continue
-                if limit:
-                    if r < 0 or r >= len(lines):
-                        continue
-                    if c < 0 or c >= len(lines[0]):
-                        continue
                 rr = r % len(lines)
                 cc = c % len(lines[0])
                 if lines[rr][cc] != "#":
                     new_possible.add((r, c))
         possible = new_possible
-    return possible
+        if i == 131 * (len(answers) + 1) + 64:
+            answers.append(len(possible))
+    return answers
 
 
 REQUIRED = 26501365
 NUM_SQUARES = REQUIRED // len(lines)
 
 # Solve a few lower rounds
-solutions = []
-
-for i in range(1, 5):
-    # Move the point of the diamond i squares and
-    # then to the far edge of the current square
-    solution = solve(S, 131 * i + 65, False)
-    solutions.append(len(solution))
+solutions = solve(S, 131 * 4 + 65)
 
 # The diff between solutions increases by a set amount
+# for each pair
 differences = []
 for a, b in zip(solutions, solutions[1:]):
     differences.append(b - a)
 
+# The difference of the differences is constant
 diff_diff = []
 for a, b in zip(differences, differences[1:]):
     diff_diff.append(b - a)
