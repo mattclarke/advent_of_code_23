@@ -37,9 +37,6 @@ while Q:
         cc = c + dc
         if (rr, cc) == GOAL:
             result = max(result, steps+1)
-            pprint(L, seen)
-            print(result)
-            # input()
             continue
         if (rr, cc) in seen:
             continue
@@ -77,7 +74,7 @@ while Q:
 
 
 
-# Part 1 = 
+# Part 1 = 2130
 print(f"answer = {result}")
 
 result = 0
