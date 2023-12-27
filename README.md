@@ -99,7 +99,7 @@ Used a dictionary to represent the layout - it might not be the most efficient d
 - Part 2: Much bigger numbers so had to rewrite part 1. Keep track of the vertical lines and the corners, and then using the "line counting" algorithm from day 10 to work out which squares are in and out.
 The complicated part is the rows where corners appear as we need to work out whether the corner represents going through a wall or not.
 
-My solution takes ~45 seconds with Pypy, but I can speed it up with maths! 
+My solution takes ~45 seconds with pypy, but I can speed it up with maths! 
 
 Rows between rows with corners, such as 1, 2 and 3, have the same wall arrangement, so we only need to calculate the first row then multiply it by the number of rows before the next corner row.
 The rows with corners need to be calculated separately because they are more complicated.
@@ -143,8 +143,8 @@ Playing around I discovered that the if we advance by x squares (and a half) the
 - Part 2: .
 
 ## Day 23
-- Part 1: .
-- Part 2: .
+- Part 1: Simple BFS because the slopes make the graph small.
+- Part 2: Without the slopes the solution to part 1 is too slow. Looking at the data we can see that there are only 34 "decision" points, so we can simplify the graph to just those points and calculate the distance between them. Then a max heap BFS will give the correct result in ~20 seconds (pypy).
 
 ## Day 24
 - Part 1: .
