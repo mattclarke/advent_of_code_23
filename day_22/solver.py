@@ -19,7 +19,6 @@ for l in lines:
 
 assert len(freefall) == len(lines)
 
-
 freefall.sort(key=lambda x: min(x[0][2], x[1][2]))
 
 
@@ -46,19 +45,17 @@ resting = []
 is_resting_on = {}
 
 for i, (first, second) in enumerate(freefall):
+    if i in is_resting_on:
+        assert False
     on = []
     heights = []
-    for j, f, s in resting:
+    for j, (f, s) in enumerate(resting):
         if resting_on((first, second), (f, s)):
             on.append(j)
             heights.append(max(f[2], s[2]))
     if on:
         mh = max(heights)
-        ontop = set()
-        for o, h in zip(on, heights):
-            if h == mh:
-                ontop.add(o)
-        is_resting_on[i] = ontop
+        is_resting_on[i] = {o for o, h in zip(on, heights) if h == mh}
         new_heights = (mh + 1, mh + 1)
         if first[2] > second[2]:
             new_heights = (new_heights[0] + first[2] - second[2], new_heights[0])
@@ -67,26 +64,27 @@ for i, (first, second) in enumerate(freefall):
 
         resting.append(
             (
-                i,
                 (first[0], first[1], new_heights[0]),
                 (second[0], second[1], new_heights[1]),
             )
         )
     else:
-        resting.append(
-            (i, (first[0], first[1], first[2]), (second[0], second[1], second[2]))
-        )
+        # I had two bugs in this bit!
+        fz = 1
+        sz = 1
+        if first[2] > second[2]:
+            fz = 1 + first[2] - second[2]
+        elif second[2] > first[2]:
+            sz = 1 + second[2] - first[2]
+        resting.append(((first[0], first[1], fz), (second[0], second[1], sz)))
 
 cannot = set()
 for k, v in is_resting_on.items():
     if len(v) == 1:
         for x in v:
             cannot.add(x)
-print(list(sorted(cannot)))
 
 result = len(resting) - len(cannot)
-# TODO: work out this off by one error
-result += 1
 
 # Part 1 = 434
 print(f"answer = {result}")
@@ -107,9 +105,5 @@ for c in cannot:
                 still_going = True
     result += len(falling) - 1
 
-
-# 63674 is wrong
-# The bug from part 1 is an issue because we have an extra cannot
-
-# Part 2 =
+# Part 2 = 61209
 print(f"answer = {result}")

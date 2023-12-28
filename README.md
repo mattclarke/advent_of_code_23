@@ -139,8 +139,8 @@ At A, multiple the length of the four range together and accumulate.
 Playing around I discovered that the if we advance by x squares (and a half) then the difference between results increases by a fixed amount each time. Thus, it is just a case of solving some simple maths.
 
 ## Day 22
-- Part 1: .
-- Part 2: .
+- Part 1: Implement a falling blocks algorithm and keep track of which blocks are resting on which. Should have been straightforward but I had two bugs to do with the blocks hitting the floor: 1) I didn't take into account the height of the block; and, 2) I didn't move the block down to the floor if it started above it and nothing was in the way. Bug 2 took a while to find :(
+- Part 2: Simple once part 1 was working properly.
 
 ## Day 23
 - Part 1: Simple BFS because the slopes make the graph small.
