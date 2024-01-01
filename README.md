@@ -147,8 +147,10 @@ Playing around I discovered that the if we advance by x squares (and a half) the
 - Part 2: Without the slopes the solution to part 1 is too slow. Looking at the data we can see that there are only 34 "decision" points, so we can simplify the graph to just those points and calculate the distance between them. Then a max heap BFS will give the correct result in ~20 seconds (pypy).
 
 ## Day 24
-- Part 1: .
-- Part 2: .
+- Part 1: Use `y=mx+c` to find out if the hailstones collide within the "box".
+- Part 2: Didn't even attempt this as couldn't see a way forward.
+Found a solution online which has two key insights: 1) the x, y and z velocities can be found by comparing positions of pairs with the same velocity; and, 2) once we have the velocities switch to the frame of reference where the rock isn't moving - where the hailstones intersect is the rock's origin.
+See the code for more detail.
 
 ## Day 25
 - Part 1: .
