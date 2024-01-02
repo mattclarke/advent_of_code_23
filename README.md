@@ -153,5 +153,5 @@ Found a solution online which has two key insights: 1) the x, y and z velocities
 See the code for more detail.
 
 ## Day 25
-- Part 1: .
-- Part 2: .
+- Part 1: Took a while to think of a solution that wasn't brute-force (far too slow!). A bit hacky, but for each node find the shortest routes to the furthest away nodes. Then keep track of how many times each edge appears in those routes. The routes to the furthest nodes should cross one of the three edges we are looking for. Find which edge is most used and re-run but with that edge "missing", so we find the new most popular edge. Repeat once more with both those edges "missing" and we then we have our three edges. Finally, calculate the size of the two groups left when those edges are "missing".
+- Part 2: No part 2 as usual.
