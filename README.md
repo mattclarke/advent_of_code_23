@@ -130,8 +130,8 @@ and so on until they reach A.
 At A, multiple the length of the four range together and accumulate.
 
 ## Day 20
-- Part 1: .
-- Part 2: .
+- Part 1: Relatively straightforward - parsing was a bit of a pain.
+- Part 2: A stupid mistake mean that this looked like a Chinese Remainder Theorem problem, but was actually a simple LCM problem. Needed help from the internet to find the issue :(
 
 ## Day 21
 - Part 1: Algorithm is relatively simple to implement.

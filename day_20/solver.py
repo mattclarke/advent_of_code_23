@@ -1,5 +1,6 @@
 import copy
 import sys
+from collections import deque
 
 
 FILE = sys.argv[1] if len(sys.argv) > 1 else "input.txt"
@@ -9,8 +10,6 @@ with open(FILE) as f:
 
 lines = [line.strip() for line in PUZZLE_INPUT.split("\n") if line]
 
-HIGH = 123
-LOW = 42
 low_sent = 0
 high_sent = 0
 
@@ -38,17 +37,17 @@ class Flipflop:
     def send(self, pulse, sender):
         global low_sent, high_sent
         result = []
-        if pulse == LOW:
+        if pulse == False:
             if self.on:
                 self.on = False
                 for d in self.dest:
                     low_sent += 1
-                    result.append((d, LOW, self.name))
+                    result.append((d, False, self.name))
             else:
                 self.on = True
                 for d in self.dest:
                     high_sent += 1
-                    result.append((d, HIGH, self.name))
+                    result.append((d, True, self.name))
         return result
 
     def __repr__(self):
@@ -60,28 +59,23 @@ class Conjunction:
         self.dest = []
         self.senders = {}
         self.name = None
-        self.all_high = False
+
+    def all_high(self):
+        return all(self.senders.values())
 
     def send(self, pulse, sender):
         global low_sent, high_sent
         result = []
-        curr = self.senders.get(sender, LOW)
         self.senders[sender] = pulse
-        # print("hello",self.name,  pulse, self.senders)
-        all_high = True
-        for v in self.senders.values():
-            if v == LOW:
-                all_high = False
-        self.all_high = all_high
 
-        if all_high:
+        if self.all_high():
             for d in self.dest:
                 low_sent += 1
-                result.append((d, LOW, self.name))
+                result.append((d, False, self.name))
         else:
             for d in self.dest:
                 high_sent += 1
-                result.append((d, HIGH, self.name))
+                result.append((d, True, self.name))
         return result
 
     def __repr__(self):
@@ -116,10 +110,13 @@ for l in lines:
         assert False
 
 modules_copy = copy.deepcopy(modules)
+
 # Run a few times to setup the Conjunctions correctly
-# TODO: do this in a better way!
-for i in range(1000):
-    Q = [("broadcaster", LOW, "")]
+# This is where I had the bug that meant I thought it was
+# a CRT problem and not an LCM problem.
+# 1000 was too low
+for i in range(5000):
+    Q = [("broadcaster", False, "")]
 
     while Q:
         d, pulse, n = Q.pop(0)
@@ -132,7 +129,7 @@ for k, v in modules_copy.items():
     if isinstance(v, Conjunction):
         inputs = {}
         for n in v.senders:
-            modules[k].senders[n] = LOW
+            modules[k].senders[n] = False
 
 low_sent = 0
 high_sent = 0
@@ -141,7 +138,7 @@ outputs = {}
 modules_pt2 = copy.deepcopy(modules)
 
 for _ in range(1000):
-    Q = [("broadcaster", LOW, "")]
+    Q = [("broadcaster", False, "")]
     low_sent += 1
 
     while Q:
@@ -157,12 +154,9 @@ for _ in range(1000):
 # Part 1 = 825896364
 print(f"answer = {low_sent * high_sent}")
 
-from collections import deque
-
 collect = {}
-not_done = True
-for i in range(1, 200_000):
-    Q = deque([("broadcaster", LOW, "")])
+for i in range(1, 20_000):
+    Q = deque([("broadcaster", False, "")])
 
     while Q:
         d, pulse, n = Q.popleft()
@@ -170,28 +164,18 @@ for i in range(1, 200_000):
             temp = modules_pt2[d].send(pulse, n)
             for t in temp:
                 Q.append(t)
-        # if d in ["hl", "hq"]:
-        #     if modules_pt2["hl"].all_high and modules_pt2["hq"].all_high:
-        #         print("hello", i)
-        if d in ["lm", "jd", "fv", "vm"]:
-        # for m in ["hl", "hq", "bc", "ql"]:
-            if not modules_pt2[d].all_high:
-                temp = collect.get(d, (0, 0))
-                if temp[1] != i:
-                    collect[d] = (temp[1], i)
-starts = []
-steps = []
-for m in ["lm", "jd", "fv", "vm"]:
-    prev, last = collect[m]
-    print(m, last, last - prev, collect[m])
-    starts.append(last)
-    steps.append(last - prev)
+        if d == "zg" and pulse:
+            if n not in collect:
+                collect[n] = i
 
-s1 = starts.pop(0)
+steps = [x for x in collect.values()]
+
+# LCM
 step1 = steps.pop(0)
+s1 = step1
 
-s2 = starts.pop(0)
 step2 = steps.pop(0)
+s2 = step2
 
 while True:
     while s1 != s2:
@@ -203,10 +187,11 @@ while True:
                 s2 += step2 * nsteps
             else:
                 s2 += step2
-    print("done", s1, s2, step1)
     step1 = step1 * step2
-    s2 = starts.pop(0)
+    if not steps:
+        break
     step2 = steps.pop(0)
+    s2 = step2
 
-# Part 2 =
-print(f"answer = {result}")
+# Part 2 = 243566897206981
+print(f"answer = {step1}")
